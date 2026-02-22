@@ -300,6 +300,191 @@ const options: swaggerJsdoc.Options = {
             },
           },
         },
+        Player: {
+          type: "object",
+          properties: {
+            id: { type: "string", format: "uuid" },
+            name: { type: "string", example: "Endrick" },
+            nickname: { type: "string", nullable: true, example: "Endrick" },
+            teamId: { type: "string", format: "uuid", nullable: true },
+            position: {
+              type: "string",
+              enum: ["GOL", "ZAG", "LD", "LE", "VOL", "MC", "MEI", "PD", "PE", "ATA", "SA"],
+              example: "ATA",
+            },
+            age: { type: "integer", example: 20 },
+            nationality: { type: "string", example: "Brasileiro" },
+            shirtNumber: { type: "integer", nullable: true, example: 9 },
+            force: { type: "integer", example: 78 },
+            velocity: { type: "integer", example: 82 },
+            stamina: { type: "integer", example: 75 },
+            technique: { type: "integer", example: 80 },
+            morale: { type: "integer", example: 50 },
+            condition: { type: "integer", example: 100 },
+            injury: { type: "integer", example: 0 },
+            salary: { type: "string", example: "500000" },
+            marketValue: { type: "string", example: "8320000" },
+            forSale: { type: "boolean", example: false },
+            askingPrice: { type: "string", nullable: true },
+            suspended: { type: "boolean", example: false },
+            yellowCards: { type: "integer", example: 0 },
+            redCards: { type: "integer", example: 0 },
+          },
+        },
+        CreatePlayer: {
+          type: "object",
+          required: [
+            "name",
+            "position",
+            "age",
+            "nationality",
+            "force",
+            "velocity",
+            "stamina",
+            "technique",
+            "salary",
+            "marketValue",
+          ],
+          properties: {
+            name: { type: "string", example: "Endrick" },
+            nickname: { type: "string", nullable: true },
+            teamId: { type: "string", format: "uuid", nullable: true },
+            position: {
+              type: "string",
+              enum: ["GOL", "ZAG", "LD", "LE", "VOL", "MC", "MEI", "PD", "PE", "ATA", "SA"],
+            },
+            age: { type: "integer", minimum: 16, maximum: 40 },
+            nationality: { type: "string" },
+            shirtNumber: { type: "integer", minimum: 1, maximum: 99, nullable: true },
+            force: { type: "integer", minimum: 1, maximum: 100 },
+            velocity: { type: "integer", minimum: 1, maximum: 100 },
+            stamina: { type: "integer", minimum: 1, maximum: 100 },
+            technique: { type: "integer", minimum: 1, maximum: 100 },
+            salary: { type: "integer", minimum: 0 },
+            marketValue: { type: "integer", minimum: 0 },
+          },
+        },
+        UpdatePlayer: {
+          type: "object",
+          properties: {
+            name: { type: "string" },
+            nickname: { type: "string", nullable: true },
+            teamId: { type: "string", format: "uuid", nullable: true },
+            position: {
+              type: "string",
+              enum: ["GOL", "ZAG", "LD", "LE", "VOL", "MC", "MEI", "PD", "PE", "ATA", "SA"],
+            },
+            age: { type: "integer" },
+            nationality: { type: "string" },
+            shirtNumber: { type: "integer", nullable: true },
+            force: { type: "integer" },
+            velocity: { type: "integer" },
+            stamina: { type: "integer" },
+            technique: { type: "integer" },
+            salary: { type: "integer" },
+            marketValue: { type: "integer" },
+          },
+        },
+        DivisionTeam: {
+          type: "object",
+          properties: {
+            id: { type: "string", format: "uuid" },
+            divisionId: { type: "string", format: "uuid" },
+            teamId: { type: "string", format: "uuid" },
+            isUserTeam: { type: "boolean" },
+          },
+        },
+        Tactic: {
+          type: "object",
+          properties: {
+            id: { type: "string", format: "uuid" },
+            careerId: { type: "string", format: "uuid" },
+            formation: { type: "string", example: "4-4-2" },
+            style: {
+              type: "string",
+              enum: ["ultra_defensive", "defensive", "moderate", "offensive", "ultra_offensive"],
+            },
+            marking: { type: "string", enum: ["zone", "man_to_man"] },
+            tempo: { type: "string", enum: ["slow", "normal", "fast"] },
+            passing: { type: "string", enum: ["short", "mixed", "long"] },
+            pressure: { type: "string", enum: ["low", "normal", "high"] },
+          },
+        },
+        Lineup: {
+          type: "object",
+          properties: {
+            id: { type: "string", format: "uuid" },
+            careerId: { type: "string", format: "uuid" },
+            name: { type: "string", nullable: true },
+          },
+        },
+        LineupPlayer: {
+          type: "object",
+          properties: {
+            id: { type: "string", format: "uuid" },
+            lineupId: { type: "string", format: "uuid" },
+            playerId: { type: "string", format: "uuid" },
+            positionSlot: { type: "string", example: "ATA1" },
+            isStarter: { type: "boolean" },
+          },
+        },
+        Round: {
+          type: "object",
+          properties: {
+            id: { type: "string", format: "uuid" },
+            divisionId: { type: "string", format: "uuid" },
+            seasonId: { type: "string", format: "uuid" },
+            number: { type: "integer", example: 1 },
+            status: { type: "string", enum: ["pending", "simulated"] },
+          },
+        },
+        Match: {
+          type: "object",
+          properties: {
+            id: { type: "string", format: "uuid" },
+            roundId: { type: "string", format: "uuid" },
+            divisionId: { type: "string", format: "uuid" },
+            homeTeamId: { type: "string", format: "uuid" },
+            awayTeamId: { type: "string", format: "uuid" },
+            homeGoals: { type: "integer", nullable: true },
+            awayGoals: { type: "integer", nullable: true },
+            attendance: { type: "integer", nullable: true },
+            played: { type: "boolean" },
+            events: { type: "array", nullable: true, items: { type: "object" } },
+          },
+        },
+        Standing: {
+          type: "object",
+          properties: {
+            id: { type: "string", format: "uuid" },
+            divisionId: { type: "string", format: "uuid" },
+            teamId: { type: "string", format: "uuid" },
+            position: { type: "integer" },
+            points: { type: "integer" },
+            played: { type: "integer" },
+            wins: { type: "integer" },
+            draws: { type: "integer" },
+            losses: { type: "integer" },
+            goalsFor: { type: "integer" },
+            goalsAgainst: { type: "integer" },
+            goalDifference: { type: "integer" },
+            form: { type: "string", example: "VVDEV" },
+            streak: { type: "string", example: "3V" },
+          },
+        },
+        Transfer: {
+          type: "object",
+          properties: {
+            id: { type: "string", format: "uuid" },
+            playerId: { type: "string", format: "uuid" },
+            fromTeamId: { type: "string", format: "uuid", nullable: true },
+            toTeamId: { type: "string", format: "uuid" },
+            seasonId: { type: "string", format: "uuid" },
+            price: { type: "string", example: "5000000" },
+            type: { type: "string", enum: ["buy", "sell", "free", "loan"] },
+            date: { type: "string", format: "date-time" },
+          },
+        },
       },
     },
     paths: {
@@ -967,6 +1152,1100 @@ const options: swaggerJsdoc.Options = {
               content: { "application/json": { schema: { $ref: "#/components/schemas/Error" } } },
             },
           },
+        },
+      },
+      "/seasons": {
+        get: {
+          tags: ["Seasons"],
+          summary: "Listar temporadas",
+          security: [{ bearerAuth: [] }],
+          responses: {
+            200: {
+              description: "Lista de temporadas",
+              content: {
+                "application/json": {
+                  schema: { type: "array", items: { $ref: "#/components/schemas/Season" } },
+                },
+              },
+            },
+          },
+        },
+        post: {
+          tags: ["Seasons"],
+          summary: "Criar temporada",
+          security: [{ bearerAuth: [] }],
+          requestBody: {
+            required: true,
+            content: {
+              "application/json": {
+                schema: {
+                  type: "object",
+                  required: ["year"],
+                  properties: { year: { type: "integer", example: 2026 } },
+                },
+              },
+            },
+          },
+          responses: {
+            201: {
+              description: "Temporada criada",
+              content: { "application/json": { schema: { $ref: "#/components/schemas/Season" } } },
+            },
+            409: {
+              description: "Ano já existe",
+              content: { "application/json": { schema: { $ref: "#/components/schemas/Error" } } },
+            },
+          },
+        },
+      },
+      "/seasons/{id}": {
+        get: {
+          tags: ["Seasons"],
+          summary: "Buscar temporada por ID",
+          security: [{ bearerAuth: [] }],
+          parameters: [
+            { name: "id", in: "path", required: true, schema: { type: "string", format: "uuid" } },
+          ],
+          responses: {
+            200: {
+              description: "Temporada",
+              content: { "application/json": { schema: { $ref: "#/components/schemas/Season" } } },
+            },
+            404: {
+              description: "Não encontrada",
+              content: { "application/json": { schema: { $ref: "#/components/schemas/Error" } } },
+            },
+          },
+        },
+        put: {
+          tags: ["Seasons"],
+          summary: "Atualizar temporada",
+          security: [{ bearerAuth: [] }],
+          parameters: [
+            { name: "id", in: "path", required: true, schema: { type: "string", format: "uuid" } },
+          ],
+          requestBody: {
+            required: true,
+            content: {
+              "application/json": {
+                schema: { type: "object", properties: { year: { type: "integer" } } },
+              },
+            },
+          },
+          responses: {
+            200: {
+              description: "Atualizada",
+              content: { "application/json": { schema: { $ref: "#/components/schemas/Season" } } },
+            },
+            404: {
+              description: "Não encontrada",
+              content: { "application/json": { schema: { $ref: "#/components/schemas/Error" } } },
+            },
+          },
+        },
+        delete: {
+          tags: ["Seasons"],
+          summary: "Remover temporada",
+          security: [{ bearerAuth: [] }],
+          parameters: [
+            { name: "id", in: "path", required: true, schema: { type: "string", format: "uuid" } },
+          ],
+          responses: {
+            204: { description: "Removida" },
+            404: {
+              description: "Não encontrada",
+              content: { "application/json": { schema: { $ref: "#/components/schemas/Error" } } },
+            },
+          },
+        },
+      },
+      "/players": {
+        get: {
+          tags: ["Players"],
+          summary: "Listar jogadores",
+          security: [{ bearerAuth: [] }],
+          responses: {
+            200: {
+              description: "Lista de jogadores",
+              content: {
+                "application/json": {
+                  schema: { type: "array", items: { $ref: "#/components/schemas/Player" } },
+                },
+              },
+            },
+          },
+        },
+        post: {
+          tags: ["Players"],
+          summary: "Criar jogador",
+          security: [{ bearerAuth: [] }],
+          requestBody: {
+            required: true,
+            content: {
+              "application/json": { schema: { $ref: "#/components/schemas/CreatePlayer" } },
+            },
+          },
+          responses: {
+            201: {
+              description: "Jogador criado",
+              content: { "application/json": { schema: { $ref: "#/components/schemas/Player" } } },
+            },
+            422: {
+              description: "Erro de validação",
+              content: {
+                "application/json": { schema: { $ref: "#/components/schemas/ValidationError" } },
+              },
+            },
+          },
+        },
+      },
+      "/players/team/{teamId}": {
+        get: {
+          tags: ["Players"],
+          summary: "Jogadores por time",
+          security: [{ bearerAuth: [] }],
+          parameters: [
+            {
+              name: "teamId",
+              in: "path",
+              required: true,
+              schema: { type: "string", format: "uuid" },
+            },
+          ],
+          responses: {
+            200: {
+              description: "Lista",
+              content: {
+                "application/json": {
+                  schema: { type: "array", items: { $ref: "#/components/schemas/Player" } },
+                },
+              },
+            },
+          },
+        },
+      },
+      "/players/{id}": {
+        get: {
+          tags: ["Players"],
+          summary: "Buscar jogador por ID",
+          security: [{ bearerAuth: [] }],
+          parameters: [
+            { name: "id", in: "path", required: true, schema: { type: "string", format: "uuid" } },
+          ],
+          responses: {
+            200: {
+              description: "Jogador",
+              content: { "application/json": { schema: { $ref: "#/components/schemas/Player" } } },
+            },
+            404: {
+              description: "Não encontrado",
+              content: { "application/json": { schema: { $ref: "#/components/schemas/Error" } } },
+            },
+          },
+        },
+        put: {
+          tags: ["Players"],
+          summary: "Atualizar jogador",
+          security: [{ bearerAuth: [] }],
+          parameters: [
+            { name: "id", in: "path", required: true, schema: { type: "string", format: "uuid" } },
+          ],
+          requestBody: {
+            required: true,
+            content: {
+              "application/json": { schema: { $ref: "#/components/schemas/UpdatePlayer" } },
+            },
+          },
+          responses: {
+            200: {
+              description: "Atualizado",
+              content: { "application/json": { schema: { $ref: "#/components/schemas/Player" } } },
+            },
+            404: {
+              description: "Não encontrado",
+              content: { "application/json": { schema: { $ref: "#/components/schemas/Error" } } },
+            },
+          },
+        },
+        delete: {
+          tags: ["Players"],
+          summary: "Remover jogador",
+          security: [{ bearerAuth: [] }],
+          parameters: [
+            { name: "id", in: "path", required: true, schema: { type: "string", format: "uuid" } },
+          ],
+          responses: {
+            204: { description: "Removido" },
+            404: {
+              description: "Não encontrado",
+              content: { "application/json": { schema: { $ref: "#/components/schemas/Error" } } },
+            },
+          },
+        },
+      },
+      "/division-teams": {
+        get: {
+          tags: ["DivisionTeams"],
+          summary: "Listar vínculos divisão-time",
+          security: [{ bearerAuth: [] }],
+          responses: {
+            200: {
+              description: "Lista",
+              content: {
+                "application/json": {
+                  schema: { type: "array", items: { $ref: "#/components/schemas/DivisionTeam" } },
+                },
+              },
+            },
+          },
+        },
+        post: {
+          tags: ["DivisionTeams"],
+          summary: "Vincular time a divisão",
+          security: [{ bearerAuth: [] }],
+          requestBody: {
+            required: true,
+            content: {
+              "application/json": {
+                schema: {
+                  type: "object",
+                  required: ["divisionId", "teamId"],
+                  properties: {
+                    divisionId: { type: "string", format: "uuid" },
+                    teamId: { type: "string", format: "uuid" },
+                    isUserTeam: { type: "boolean" },
+                  },
+                },
+              },
+            },
+          },
+          responses: {
+            201: {
+              description: "Criado",
+              content: {
+                "application/json": { schema: { $ref: "#/components/schemas/DivisionTeam" } },
+              },
+            },
+            409: {
+              description: "Já existe",
+              content: { "application/json": { schema: { $ref: "#/components/schemas/Error" } } },
+            },
+          },
+        },
+      },
+      "/division-teams/division/{divisionId}": {
+        get: {
+          tags: ["DivisionTeams"],
+          summary: "Times de uma divisão",
+          security: [{ bearerAuth: [] }],
+          parameters: [
+            {
+              name: "divisionId",
+              in: "path",
+              required: true,
+              schema: { type: "string", format: "uuid" },
+            },
+          ],
+          responses: {
+            200: {
+              description: "Lista",
+              content: {
+                "application/json": {
+                  schema: { type: "array", items: { $ref: "#/components/schemas/DivisionTeam" } },
+                },
+              },
+            },
+          },
+        },
+      },
+      "/division-teams/{id}": {
+        get: {
+          tags: ["DivisionTeams"],
+          summary: "Buscar por ID",
+          security: [{ bearerAuth: [] }],
+          parameters: [
+            { name: "id", in: "path", required: true, schema: { type: "string", format: "uuid" } },
+          ],
+          responses: {
+            200: {
+              description: "DivisionTeam",
+              content: {
+                "application/json": { schema: { $ref: "#/components/schemas/DivisionTeam" } },
+              },
+            },
+            404: {
+              description: "Não encontrado",
+              content: { "application/json": { schema: { $ref: "#/components/schemas/Error" } } },
+            },
+          },
+        },
+        put: {
+          tags: ["DivisionTeams"],
+          summary: "Atualizar vínculo",
+          security: [{ bearerAuth: [] }],
+          parameters: [
+            { name: "id", in: "path", required: true, schema: { type: "string", format: "uuid" } },
+          ],
+          requestBody: {
+            required: true,
+            content: {
+              "application/json": {
+                schema: { type: "object", properties: { isUserTeam: { type: "boolean" } } },
+              },
+            },
+          },
+          responses: {
+            200: {
+              description: "Atualizado",
+              content: {
+                "application/json": { schema: { $ref: "#/components/schemas/DivisionTeam" } },
+              },
+            },
+          },
+        },
+        delete: {
+          tags: ["DivisionTeams"],
+          summary: "Remover vínculo",
+          security: [{ bearerAuth: [] }],
+          parameters: [
+            { name: "id", in: "path", required: true, schema: { type: "string", format: "uuid" } },
+          ],
+          responses: {
+            204: { description: "Removido" },
+            404: {
+              description: "Não encontrado",
+              content: { "application/json": { schema: { $ref: "#/components/schemas/Error" } } },
+            },
+          },
+        },
+      },
+      "/tactics": {
+        post: {
+          tags: ["Tactics"],
+          summary: "Criar tática",
+          security: [{ bearerAuth: [] }],
+          requestBody: {
+            required: true,
+            content: {
+              "application/json": {
+                schema: {
+                  type: "object",
+                  required: ["careerId"],
+                  properties: {
+                    careerId: { type: "string", format: "uuid" },
+                    formation: { type: "string" },
+                    style: { type: "string" },
+                    marking: { type: "string" },
+                    tempo: { type: "string" },
+                    passing: { type: "string" },
+                    pressure: { type: "string" },
+                  },
+                },
+              },
+            },
+          },
+          responses: {
+            201: {
+              description: "Tática criada",
+              content: { "application/json": { schema: { $ref: "#/components/schemas/Tactic" } } },
+            },
+            409: {
+              description: "Já existe para esta carreira",
+              content: { "application/json": { schema: { $ref: "#/components/schemas/Error" } } },
+            },
+          },
+        },
+      },
+      "/tactics/career/{careerId}": {
+        get: {
+          tags: ["Tactics"],
+          summary: "Buscar tática por carreira",
+          security: [{ bearerAuth: [] }],
+          parameters: [
+            {
+              name: "careerId",
+              in: "path",
+              required: true,
+              schema: { type: "string", format: "uuid" },
+            },
+          ],
+          responses: {
+            200: {
+              description: "Tática",
+              content: { "application/json": { schema: { $ref: "#/components/schemas/Tactic" } } },
+            },
+          },
+        },
+      },
+      "/tactics/{id}": {
+        get: {
+          tags: ["Tactics"],
+          summary: "Buscar tática por ID",
+          security: [{ bearerAuth: [] }],
+          parameters: [
+            { name: "id", in: "path", required: true, schema: { type: "string", format: "uuid" } },
+          ],
+          responses: {
+            200: {
+              description: "Tática",
+              content: { "application/json": { schema: { $ref: "#/components/schemas/Tactic" } } },
+            },
+            404: {
+              description: "Não encontrada",
+              content: { "application/json": { schema: { $ref: "#/components/schemas/Error" } } },
+            },
+          },
+        },
+        put: {
+          tags: ["Tactics"],
+          summary: "Atualizar tática",
+          security: [{ bearerAuth: [] }],
+          parameters: [
+            { name: "id", in: "path", required: true, schema: { type: "string", format: "uuid" } },
+          ],
+          requestBody: {
+            required: true,
+            content: {
+              "application/json": {
+                schema: {
+                  type: "object",
+                  properties: {
+                    formation: { type: "string" },
+                    style: { type: "string" },
+                    marking: { type: "string" },
+                    tempo: { type: "string" },
+                    passing: { type: "string" },
+                    pressure: { type: "string" },
+                  },
+                },
+              },
+            },
+          },
+          responses: {
+            200: {
+              description: "Atualizada",
+              content: { "application/json": { schema: { $ref: "#/components/schemas/Tactic" } } },
+            },
+          },
+        },
+        delete: {
+          tags: ["Tactics"],
+          summary: "Remover tática",
+          security: [{ bearerAuth: [] }],
+          parameters: [
+            { name: "id", in: "path", required: true, schema: { type: "string", format: "uuid" } },
+          ],
+          responses: { 204: { description: "Removida" } },
+        },
+      },
+      "/lineups": {
+        post: {
+          tags: ["Lineups"],
+          summary: "Criar escalação",
+          security: [{ bearerAuth: [] }],
+          requestBody: {
+            required: true,
+            content: {
+              "application/json": {
+                schema: {
+                  type: "object",
+                  required: ["careerId"],
+                  properties: {
+                    careerId: { type: "string", format: "uuid" },
+                    name: { type: "string", nullable: true },
+                  },
+                },
+              },
+            },
+          },
+          responses: {
+            201: {
+              description: "Escalação criada",
+              content: { "application/json": { schema: { $ref: "#/components/schemas/Lineup" } } },
+            },
+          },
+        },
+      },
+      "/lineups/career/{careerId}": {
+        get: {
+          tags: ["Lineups"],
+          summary: "Escalações por carreira",
+          security: [{ bearerAuth: [] }],
+          parameters: [
+            {
+              name: "careerId",
+              in: "path",
+              required: true,
+              schema: { type: "string", format: "uuid" },
+            },
+          ],
+          responses: {
+            200: {
+              description: "Lista",
+              content: {
+                "application/json": {
+                  schema: { type: "array", items: { $ref: "#/components/schemas/Lineup" } },
+                },
+              },
+            },
+          },
+        },
+      },
+      "/lineups/{id}": {
+        get: {
+          tags: ["Lineups"],
+          summary: "Buscar escalação por ID",
+          security: [{ bearerAuth: [] }],
+          parameters: [
+            { name: "id", in: "path", required: true, schema: { type: "string", format: "uuid" } },
+          ],
+          responses: {
+            200: {
+              description: "Escalação",
+              content: { "application/json": { schema: { $ref: "#/components/schemas/Lineup" } } },
+            },
+            404: {
+              description: "Não encontrada",
+              content: { "application/json": { schema: { $ref: "#/components/schemas/Error" } } },
+            },
+          },
+        },
+        put: {
+          tags: ["Lineups"],
+          summary: "Atualizar escalação",
+          security: [{ bearerAuth: [] }],
+          parameters: [
+            { name: "id", in: "path", required: true, schema: { type: "string", format: "uuid" } },
+          ],
+          requestBody: {
+            required: true,
+            content: {
+              "application/json": {
+                schema: {
+                  type: "object",
+                  properties: { name: { type: "string", nullable: true } },
+                },
+              },
+            },
+          },
+          responses: {
+            200: {
+              description: "Atualizada",
+              content: { "application/json": { schema: { $ref: "#/components/schemas/Lineup" } } },
+            },
+          },
+        },
+        delete: {
+          tags: ["Lineups"],
+          summary: "Remover escalação",
+          security: [{ bearerAuth: [] }],
+          parameters: [
+            { name: "id", in: "path", required: true, schema: { type: "string", format: "uuid" } },
+          ],
+          responses: { 204: { description: "Removida" } },
+        },
+      },
+      "/lineup-players": {
+        post: {
+          tags: ["LineupPlayers"],
+          summary: "Adicionar jogador à escalação",
+          security: [{ bearerAuth: [] }],
+          requestBody: {
+            required: true,
+            content: {
+              "application/json": {
+                schema: {
+                  type: "object",
+                  required: ["lineupId", "playerId", "positionSlot"],
+                  properties: {
+                    lineupId: { type: "string", format: "uuid" },
+                    playerId: { type: "string", format: "uuid" },
+                    positionSlot: { type: "string" },
+                    isStarter: { type: "boolean" },
+                  },
+                },
+              },
+            },
+          },
+          responses: {
+            201: {
+              description: "Adicionado",
+              content: {
+                "application/json": { schema: { $ref: "#/components/schemas/LineupPlayer" } },
+              },
+            },
+          },
+        },
+      },
+      "/lineup-players/lineup/{lineupId}": {
+        get: {
+          tags: ["LineupPlayers"],
+          summary: "Jogadores de uma escalação",
+          security: [{ bearerAuth: [] }],
+          parameters: [
+            {
+              name: "lineupId",
+              in: "path",
+              required: true,
+              schema: { type: "string", format: "uuid" },
+            },
+          ],
+          responses: {
+            200: {
+              description: "Lista",
+              content: {
+                "application/json": {
+                  schema: { type: "array", items: { $ref: "#/components/schemas/LineupPlayer" } },
+                },
+              },
+            },
+          },
+        },
+      },
+      "/lineup-players/{id}": {
+        get: {
+          tags: ["LineupPlayers"],
+          summary: "Buscar por ID",
+          security: [{ bearerAuth: [] }],
+          parameters: [
+            { name: "id", in: "path", required: true, schema: { type: "string", format: "uuid" } },
+          ],
+          responses: {
+            200: {
+              description: "LineupPlayer",
+              content: {
+                "application/json": { schema: { $ref: "#/components/schemas/LineupPlayer" } },
+              },
+            },
+            404: {
+              description: "Não encontrado",
+              content: { "application/json": { schema: { $ref: "#/components/schemas/Error" } } },
+            },
+          },
+        },
+        put: {
+          tags: ["LineupPlayers"],
+          summary: "Atualizar jogador na escalação",
+          security: [{ bearerAuth: [] }],
+          parameters: [
+            { name: "id", in: "path", required: true, schema: { type: "string", format: "uuid" } },
+          ],
+          requestBody: {
+            required: true,
+            content: {
+              "application/json": {
+                schema: {
+                  type: "object",
+                  properties: { positionSlot: { type: "string" }, isStarter: { type: "boolean" } },
+                },
+              },
+            },
+          },
+          responses: {
+            200: {
+              description: "Atualizado",
+              content: {
+                "application/json": { schema: { $ref: "#/components/schemas/LineupPlayer" } },
+              },
+            },
+          },
+        },
+        delete: {
+          tags: ["LineupPlayers"],
+          summary: "Remover jogador da escalação",
+          security: [{ bearerAuth: [] }],
+          parameters: [
+            { name: "id", in: "path", required: true, schema: { type: "string", format: "uuid" } },
+          ],
+          responses: { 204: { description: "Removido" } },
+        },
+      },
+      "/rounds": {
+        get: {
+          tags: ["Rounds"],
+          summary: "Listar rodadas",
+          security: [{ bearerAuth: [] }],
+          responses: {
+            200: {
+              description: "Lista",
+              content: {
+                "application/json": {
+                  schema: { type: "array", items: { $ref: "#/components/schemas/Round" } },
+                },
+              },
+            },
+          },
+        },
+        post: {
+          tags: ["Rounds"],
+          summary: "Criar rodada",
+          security: [{ bearerAuth: [] }],
+          requestBody: {
+            required: true,
+            content: {
+              "application/json": {
+                schema: {
+                  type: "object",
+                  required: ["divisionId", "seasonId", "number"],
+                  properties: {
+                    divisionId: { type: "string", format: "uuid" },
+                    seasonId: { type: "string", format: "uuid" },
+                    number: { type: "integer" },
+                  },
+                },
+              },
+            },
+          },
+          responses: {
+            201: {
+              description: "Rodada criada",
+              content: { "application/json": { schema: { $ref: "#/components/schemas/Round" } } },
+            },
+          },
+        },
+      },
+      "/rounds/division/{divisionId}": {
+        get: {
+          tags: ["Rounds"],
+          summary: "Rodadas por divisão",
+          security: [{ bearerAuth: [] }],
+          parameters: [
+            {
+              name: "divisionId",
+              in: "path",
+              required: true,
+              schema: { type: "string", format: "uuid" },
+            },
+          ],
+          responses: {
+            200: {
+              description: "Lista",
+              content: {
+                "application/json": {
+                  schema: { type: "array", items: { $ref: "#/components/schemas/Round" } },
+                },
+              },
+            },
+          },
+        },
+      },
+      "/rounds/{id}": {
+        get: {
+          tags: ["Rounds"],
+          summary: "Buscar rodada por ID",
+          security: [{ bearerAuth: [] }],
+          parameters: [
+            { name: "id", in: "path", required: true, schema: { type: "string", format: "uuid" } },
+          ],
+          responses: {
+            200: {
+              description: "Rodada",
+              content: { "application/json": { schema: { $ref: "#/components/schemas/Round" } } },
+            },
+            404: {
+              description: "Não encontrada",
+              content: { "application/json": { schema: { $ref: "#/components/schemas/Error" } } },
+            },
+          },
+        },
+        delete: {
+          tags: ["Rounds"],
+          summary: "Remover rodada",
+          security: [{ bearerAuth: [] }],
+          parameters: [
+            { name: "id", in: "path", required: true, schema: { type: "string", format: "uuid" } },
+          ],
+          responses: { 204: { description: "Removida" } },
+        },
+      },
+      "/matches": {
+        get: {
+          tags: ["Matches"],
+          summary: "Listar partidas",
+          security: [{ bearerAuth: [] }],
+          responses: {
+            200: {
+              description: "Lista",
+              content: {
+                "application/json": {
+                  schema: { type: "array", items: { $ref: "#/components/schemas/Match" } },
+                },
+              },
+            },
+          },
+        },
+        post: {
+          tags: ["Matches"],
+          summary: "Criar partida",
+          security: [{ bearerAuth: [] }],
+          requestBody: {
+            required: true,
+            content: {
+              "application/json": {
+                schema: {
+                  type: "object",
+                  required: ["roundId", "divisionId", "homeTeamId", "awayTeamId"],
+                  properties: {
+                    roundId: { type: "string", format: "uuid" },
+                    divisionId: { type: "string", format: "uuid" },
+                    homeTeamId: { type: "string", format: "uuid" },
+                    awayTeamId: { type: "string", format: "uuid" },
+                  },
+                },
+              },
+            },
+          },
+          responses: {
+            201: {
+              description: "Partida criada",
+              content: { "application/json": { schema: { $ref: "#/components/schemas/Match" } } },
+            },
+          },
+        },
+      },
+      "/matches/round/{roundId}": {
+        get: {
+          tags: ["Matches"],
+          summary: "Partidas por rodada",
+          security: [{ bearerAuth: [] }],
+          parameters: [
+            {
+              name: "roundId",
+              in: "path",
+              required: true,
+              schema: { type: "string", format: "uuid" },
+            },
+          ],
+          responses: {
+            200: {
+              description: "Lista",
+              content: {
+                "application/json": {
+                  schema: { type: "array", items: { $ref: "#/components/schemas/Match" } },
+                },
+              },
+            },
+          },
+        },
+      },
+      "/matches/{id}": {
+        get: {
+          tags: ["Matches"],
+          summary: "Buscar partida por ID",
+          security: [{ bearerAuth: [] }],
+          parameters: [
+            { name: "id", in: "path", required: true, schema: { type: "string", format: "uuid" } },
+          ],
+          responses: {
+            200: {
+              description: "Partida",
+              content: { "application/json": { schema: { $ref: "#/components/schemas/Match" } } },
+            },
+            404: {
+              description: "Não encontrada",
+              content: { "application/json": { schema: { $ref: "#/components/schemas/Error" } } },
+            },
+          },
+        },
+        delete: {
+          tags: ["Matches"],
+          summary: "Remover partida",
+          security: [{ bearerAuth: [] }],
+          parameters: [
+            { name: "id", in: "path", required: true, schema: { type: "string", format: "uuid" } },
+          ],
+          responses: { 204: { description: "Removida" } },
+        },
+      },
+      "/standings/division/{divisionId}": {
+        get: {
+          tags: ["Standings"],
+          summary: "Classificação por divisão",
+          security: [{ bearerAuth: [] }],
+          parameters: [
+            {
+              name: "divisionId",
+              in: "path",
+              required: true,
+              schema: { type: "string", format: "uuid" },
+            },
+          ],
+          responses: {
+            200: {
+              description: "Tabela de classificação",
+              content: {
+                "application/json": {
+                  schema: { type: "array", items: { $ref: "#/components/schemas/Standing" } },
+                },
+              },
+            },
+          },
+        },
+      },
+      "/standings": {
+        post: {
+          tags: ["Standings"],
+          summary: "Criar standing",
+          security: [{ bearerAuth: [] }],
+          requestBody: {
+            required: true,
+            content: {
+              "application/json": {
+                schema: {
+                  type: "object",
+                  required: ["divisionId", "teamId"],
+                  properties: {
+                    divisionId: { type: "string", format: "uuid" },
+                    teamId: { type: "string", format: "uuid" },
+                  },
+                },
+              },
+            },
+          },
+          responses: {
+            201: {
+              description: "Criado",
+              content: {
+                "application/json": { schema: { $ref: "#/components/schemas/Standing" } },
+              },
+            },
+          },
+        },
+      },
+      "/standings/{id}": {
+        get: {
+          tags: ["Standings"],
+          summary: "Buscar por ID",
+          security: [{ bearerAuth: [] }],
+          parameters: [
+            { name: "id", in: "path", required: true, schema: { type: "string", format: "uuid" } },
+          ],
+          responses: {
+            200: {
+              description: "Standing",
+              content: {
+                "application/json": { schema: { $ref: "#/components/schemas/Standing" } },
+              },
+            },
+            404: {
+              description: "Não encontrado",
+              content: { "application/json": { schema: { $ref: "#/components/schemas/Error" } } },
+            },
+          },
+        },
+        delete: {
+          tags: ["Standings"],
+          summary: "Remover standing",
+          security: [{ bearerAuth: [] }],
+          parameters: [
+            { name: "id", in: "path", required: true, schema: { type: "string", format: "uuid" } },
+          ],
+          responses: { 204: { description: "Removido" } },
+        },
+      },
+      "/transfers": {
+        get: {
+          tags: ["Transfers"],
+          summary: "Listar transferências",
+          security: [{ bearerAuth: [] }],
+          responses: {
+            200: {
+              description: "Lista",
+              content: {
+                "application/json": {
+                  schema: { type: "array", items: { $ref: "#/components/schemas/Transfer" } },
+                },
+              },
+            },
+          },
+        },
+        post: {
+          tags: ["Transfers"],
+          summary: "Registrar transferência",
+          security: [{ bearerAuth: [] }],
+          requestBody: {
+            required: true,
+            content: {
+              "application/json": {
+                schema: {
+                  type: "object",
+                  required: ["playerId", "toTeamId", "seasonId", "price", "type"],
+                  properties: {
+                    playerId: { type: "string", format: "uuid" },
+                    fromTeamId: { type: "string", format: "uuid", nullable: true },
+                    toTeamId: { type: "string", format: "uuid" },
+                    seasonId: { type: "string", format: "uuid" },
+                    price: { type: "integer" },
+                    type: { type: "string", enum: ["buy", "sell", "free", "loan"] },
+                  },
+                },
+              },
+            },
+          },
+          responses: {
+            201: {
+              description: "Registrada",
+              content: {
+                "application/json": { schema: { $ref: "#/components/schemas/Transfer" } },
+              },
+            },
+          },
+        },
+      },
+      "/transfers/season/{seasonId}": {
+        get: {
+          tags: ["Transfers"],
+          summary: "Transferências por temporada",
+          security: [{ bearerAuth: [] }],
+          parameters: [
+            {
+              name: "seasonId",
+              in: "path",
+              required: true,
+              schema: { type: "string", format: "uuid" },
+            },
+          ],
+          responses: {
+            200: {
+              description: "Lista",
+              content: {
+                "application/json": {
+                  schema: { type: "array", items: { $ref: "#/components/schemas/Transfer" } },
+                },
+              },
+            },
+          },
+        },
+      },
+      "/transfers/{id}": {
+        get: {
+          tags: ["Transfers"],
+          summary: "Buscar transferência por ID",
+          security: [{ bearerAuth: [] }],
+          parameters: [
+            { name: "id", in: "path", required: true, schema: { type: "string", format: "uuid" } },
+          ],
+          responses: {
+            200: {
+              description: "Transferência",
+              content: {
+                "application/json": { schema: { $ref: "#/components/schemas/Transfer" } },
+              },
+            },
+            404: {
+              description: "Não encontrada",
+              content: { "application/json": { schema: { $ref: "#/components/schemas/Error" } } },
+            },
+          },
+        },
+        delete: {
+          tags: ["Transfers"],
+          summary: "Remover transferência",
+          security: [{ bearerAuth: [] }],
+          parameters: [
+            { name: "id", in: "path", required: true, schema: { type: "string", format: "uuid" } },
+          ],
+          responses: { 204: { description: "Removida" } },
         },
       },
     },
