@@ -10,4 +10,8 @@ export const env = {
     password: process.env.DB_PASSWORD || "postgres",
     database: process.env.DB_DATABASE || "futebol_db",
   },
+  jwt: {
+    secret: process.env.JWT_SECRET || "futmanager-dev-secret-key",
+    expiresIn: process.env.JWT_EXPIRES_IN || "7d",
+  },
 };
