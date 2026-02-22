@@ -4,9 +4,10 @@ const options: swaggerJsdoc.Options = {
   definition: {
     openapi: "3.0.0",
     info: {
-      title: "Futebol API",
+      title: "FutManager API",
       version: "1.0.0",
-      description: "API RESTful para gerenciamento de dados de futebol",
+      description:
+        "API RESTful para o FutManager — simulador de gerenciamento de futebol brasileiro inspirado no Brasfoot",
       contact: {
         name: "Cortella",
         url: "https://github.com/Cortella/futebol-api",
@@ -19,86 +20,59 @@ const options: swaggerJsdoc.Options = {
       },
     ],
     components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: "http",
+          scheme: "bearer",
+          bearerFormat: "JWT",
+          description: "Informe o token JWT obtido no login",
+        },
+      },
       schemas: {
-        Team: {
+        User: {
           type: "object",
           properties: {
-            id: { type: "string", format: "uuid", example: "a1b2c3d4-e5f6-7890-abcd-ef1234567890" },
-            name: { type: "string", example: "Flamengo" },
-            city: { type: "string", example: "Rio de Janeiro" },
-            stadium: { type: "string", example: "Maracanã" },
-            foundedYear: { type: "integer", example: 1895 },
-            logoUrl: { type: "string", nullable: true, example: "https://example.com/logo.png" },
-            players: {
-              type: "array",
-              items: { $ref: "#/components/schemas/Player" },
-            },
-            createdAt: { type: "string", format: "date-time" },
-            updatedAt: { type: "string", format: "date-time" },
-          },
-        },
-        CreateTeam: {
-          type: "object",
-          required: ["name", "city", "stadium", "foundedYear"],
-          properties: {
-            name: { type: "string", minLength: 1, maxLength: 100, example: "Flamengo" },
-            city: { type: "string", minLength: 1, maxLength: 100, example: "Rio de Janeiro" },
-            stadium: { type: "string", minLength: 1, maxLength: 100, example: "Maracanã" },
-            foundedYear: { type: "integer", minimum: 1800, example: 1895 },
-            logoUrl: {
+            id: {
               type: "string",
-              format: "uri",
-              maxLength: 500,
-              example: "https://example.com/logo.png",
+              format: "uuid",
+              example: "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
             },
-          },
-        },
-        UpdateTeam: {
-          type: "object",
-          properties: {
-            name: { type: "string", minLength: 1, maxLength: 100 },
-            city: { type: "string", minLength: 1, maxLength: 100 },
-            stadium: { type: "string", minLength: 1, maxLength: 100 },
-            foundedYear: { type: "integer", minimum: 1800 },
-            logoUrl: { type: "string", format: "uri", maxLength: 500 },
-          },
-        },
-        Player: {
-          type: "object",
-          properties: {
-            id: { type: "string", format: "uuid" },
-            name: { type: "string", example: "Gabigol" },
-            position: { type: "string", example: "Forward" },
-            number: { type: "integer", example: 9 },
-            nationality: { type: "string", example: "Brazilian" },
-            birthDate: { type: "string", format: "date", example: "1996-08-30" },
-            teamId: { type: "string", format: "uuid", nullable: true },
-            team: { $ref: "#/components/schemas/Team" },
+            username: { type: "string", example: "cortella" },
+            email: { type: "string", format: "email", example: "cortella@email.com" },
             createdAt: { type: "string", format: "date-time" },
-            updatedAt: { type: "string", format: "date-time" },
           },
         },
-        CreatePlayer: {
+        RegisterInput: {
           type: "object",
-          required: ["name", "position", "number", "nationality", "birthDate"],
+          required: ["username", "email", "password"],
           properties: {
-            name: { type: "string", minLength: 1, maxLength: 100, example: "Gabigol" },
-            position: { type: "string", minLength: 1, maxLength: 50, example: "Forward" },
-            number: { type: "integer", minimum: 1, maximum: 99, example: 9 },
-            nationality: { type: "string", minLength: 1, maxLength: 50, example: "Brazilian" },
-            birthDate: { type: "string", pattern: "^\\d{4}-\\d{2}-\\d{2}$", example: "1996-08-30" },
-            teamId: { type: "string", format: "uuid" },
+            username: {
+              type: "string",
+              minLength: 3,
+              maxLength: 20,
+              pattern: "^[a-zA-Z0-9]+$",
+              example: "cortella",
+            },
+            email: { type: "string", format: "email", example: "cortella@email.com" },
+            password: { type: "string", minLength: 6, example: "senha123" },
           },
         },
-        UpdatePlayer: {
+        LoginInput: {
+          type: "object",
+          required: ["email", "password"],
+          properties: {
+            email: { type: "string", format: "email", example: "cortella@email.com" },
+            password: { type: "string", example: "senha123" },
+          },
+        },
+        AuthResponse: {
           type: "object",
           properties: {
-            name: { type: "string", minLength: 1, maxLength: 100 },
-            position: { type: "string", minLength: 1, maxLength: 50 },
-            number: { type: "integer", minimum: 1, maximum: 99 },
-            nationality: { type: "string", minLength: 1, maxLength: 50 },
-            birthDate: { type: "string", pattern: "^\\d{4}-\\d{2}-\\d{2}$" },
-            teamId: { type: "string", format: "uuid" },
+            user: { $ref: "#/components/schemas/User" },
+            token: {
+              type: "string",
+              example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+            },
           },
         },
         Error: {
@@ -117,8 +91,8 @@ const options: swaggerJsdoc.Options = {
               items: {
                 type: "object",
                 properties: {
-                  field: { type: "string", example: "name" },
-                  message: { type: "string", example: "Required" },
+                  field: { type: "string", example: "email" },
+                  message: { type: "string", example: "Invalid email format" },
                 },
               },
             },
@@ -150,43 +124,35 @@ const options: swaggerJsdoc.Options = {
           },
         },
       },
-      "/teams": {
-        get: {
-          tags: ["Teams"],
-          summary: "Listar todos os times",
-          description: "Retorna todos os times cadastrados com seus jogadores",
-          responses: {
-            200: {
-              description: "Lista de times",
-              content: {
-                "application/json": {
-                  schema: {
-                    type: "array",
-                    items: { $ref: "#/components/schemas/Team" },
-                  },
-                },
-              },
-            },
-          },
-        },
+      "/auth/register": {
         post: {
-          tags: ["Teams"],
-          summary: "Criar um novo time",
-          description: "Cadastra um novo time no sistema",
+          tags: ["Auth"],
+          summary: "Criar conta",
+          description:
+            "Registra um novo usuário no sistema. Username deve ser alfanumérico (3-20 chars), senha mínimo 6 chars.",
           requestBody: {
             required: true,
             content: {
               "application/json": {
-                schema: { $ref: "#/components/schemas/CreateTeam" },
+                schema: { $ref: "#/components/schemas/RegisterInput" },
               },
             },
           },
           responses: {
             201: {
-              description: "Time criado com sucesso",
+              description: "Usuário criado com sucesso",
               content: {
                 "application/json": {
-                  schema: { $ref: "#/components/schemas/Team" },
+                  schema: { $ref: "#/components/schemas/AuthResponse" },
+                },
+              },
+            },
+            409: {
+              description: "Email ou username já em uso",
+              content: {
+                "application/json": {
+                  schema: { $ref: "#/components/schemas/Error" },
+                  example: { status: "error", message: "Email already in use" },
                 },
               },
             },
@@ -201,150 +167,34 @@ const options: swaggerJsdoc.Options = {
           },
         },
       },
-      "/teams/{id}": {
-        get: {
-          tags: ["Teams"],
-          summary: "Buscar time por ID",
-          description: "Retorna os detalhes de um time específico",
-          parameters: [
-            {
-              name: "id",
-              in: "path",
-              required: true,
-              schema: { type: "string", format: "uuid" },
-              description: "ID do time",
-            },
-          ],
-          responses: {
-            200: {
-              description: "Detalhes do time",
-              content: {
-                "application/json": {
-                  schema: { $ref: "#/components/schemas/Team" },
-                },
-              },
-            },
-            404: {
-              description: "Time não encontrado",
-              content: {
-                "application/json": {
-                  schema: { $ref: "#/components/schemas/Error" },
-                },
-              },
-            },
-          },
-        },
-        put: {
-          tags: ["Teams"],
-          summary: "Atualizar um time",
-          description: "Atualiza os dados de um time existente",
-          parameters: [
-            {
-              name: "id",
-              in: "path",
-              required: true,
-              schema: { type: "string", format: "uuid" },
-              description: "ID do time",
-            },
-          ],
-          requestBody: {
-            required: true,
-            content: {
-              "application/json": {
-                schema: { $ref: "#/components/schemas/UpdateTeam" },
-              },
-            },
-          },
-          responses: {
-            200: {
-              description: "Time atualizado",
-              content: {
-                "application/json": {
-                  schema: { $ref: "#/components/schemas/Team" },
-                },
-              },
-            },
-            404: {
-              description: "Time não encontrado",
-              content: {
-                "application/json": {
-                  schema: { $ref: "#/components/schemas/Error" },
-                },
-              },
-            },
-            422: {
-              description: "Erro de validação",
-              content: {
-                "application/json": {
-                  schema: { $ref: "#/components/schemas/ValidationError" },
-                },
-              },
-            },
-          },
-        },
-        delete: {
-          tags: ["Teams"],
-          summary: "Remover um time",
-          description: "Remove um time do sistema",
-          parameters: [
-            {
-              name: "id",
-              in: "path",
-              required: true,
-              schema: { type: "string", format: "uuid" },
-              description: "ID do time",
-            },
-          ],
-          responses: {
-            204: { description: "Time removido com sucesso" },
-            404: {
-              description: "Time não encontrado",
-              content: {
-                "application/json": {
-                  schema: { $ref: "#/components/schemas/Error" },
-                },
-              },
-            },
-          },
-        },
-      },
-      "/players": {
-        get: {
-          tags: ["Players"],
-          summary: "Listar todos os jogadores",
-          description: "Retorna todos os jogadores cadastrados com seus times",
-          responses: {
-            200: {
-              description: "Lista de jogadores",
-              content: {
-                "application/json": {
-                  schema: {
-                    type: "array",
-                    items: { $ref: "#/components/schemas/Player" },
-                  },
-                },
-              },
-            },
-          },
-        },
+      "/auth/login": {
         post: {
-          tags: ["Players"],
-          summary: "Criar um novo jogador",
-          description: "Cadastra um novo jogador no sistema",
+          tags: ["Auth"],
+          summary: "Login",
+          description: "Autentica o usuário e retorna um token JWT válido por 7 dias.",
           requestBody: {
             required: true,
             content: {
               "application/json": {
-                schema: { $ref: "#/components/schemas/CreatePlayer" },
+                schema: { $ref: "#/components/schemas/LoginInput" },
               },
             },
           },
           responses: {
-            201: {
-              description: "Jogador criado com sucesso",
+            200: {
+              description: "Login realizado com sucesso",
               content: {
                 "application/json": {
-                  schema: { $ref: "#/components/schemas/Player" },
+                  schema: { $ref: "#/components/schemas/AuthResponse" },
+                },
+              },
+            },
+            401: {
+              description: "Credenciais inválidas",
+              content: {
+                "application/json": {
+                  schema: { $ref: "#/components/schemas/Error" },
+                  example: { status: "error", message: "Invalid credentials" },
                 },
               },
             },
@@ -353,142 +203,6 @@ const options: swaggerJsdoc.Options = {
               content: {
                 "application/json": {
                   schema: { $ref: "#/components/schemas/ValidationError" },
-                },
-              },
-            },
-          },
-        },
-      },
-      "/players/{id}": {
-        get: {
-          tags: ["Players"],
-          summary: "Buscar jogador por ID",
-          description: "Retorna os detalhes de um jogador específico",
-          parameters: [
-            {
-              name: "id",
-              in: "path",
-              required: true,
-              schema: { type: "string", format: "uuid" },
-              description: "ID do jogador",
-            },
-          ],
-          responses: {
-            200: {
-              description: "Detalhes do jogador",
-              content: {
-                "application/json": {
-                  schema: { $ref: "#/components/schemas/Player" },
-                },
-              },
-            },
-            404: {
-              description: "Jogador não encontrado",
-              content: {
-                "application/json": {
-                  schema: { $ref: "#/components/schemas/Error" },
-                },
-              },
-            },
-          },
-        },
-        put: {
-          tags: ["Players"],
-          summary: "Atualizar um jogador",
-          description: "Atualiza os dados de um jogador existente",
-          parameters: [
-            {
-              name: "id",
-              in: "path",
-              required: true,
-              schema: { type: "string", format: "uuid" },
-              description: "ID do jogador",
-            },
-          ],
-          requestBody: {
-            required: true,
-            content: {
-              "application/json": {
-                schema: { $ref: "#/components/schemas/UpdatePlayer" },
-              },
-            },
-          },
-          responses: {
-            200: {
-              description: "Jogador atualizado",
-              content: {
-                "application/json": {
-                  schema: { $ref: "#/components/schemas/Player" },
-                },
-              },
-            },
-            404: {
-              description: "Jogador não encontrado",
-              content: {
-                "application/json": {
-                  schema: { $ref: "#/components/schemas/Error" },
-                },
-              },
-            },
-            422: {
-              description: "Erro de validação",
-              content: {
-                "application/json": {
-                  schema: { $ref: "#/components/schemas/ValidationError" },
-                },
-              },
-            },
-          },
-        },
-        delete: {
-          tags: ["Players"],
-          summary: "Remover um jogador",
-          description: "Remove um jogador do sistema",
-          parameters: [
-            {
-              name: "id",
-              in: "path",
-              required: true,
-              schema: { type: "string", format: "uuid" },
-              description: "ID do jogador",
-            },
-          ],
-          responses: {
-            204: { description: "Jogador removido com sucesso" },
-            404: {
-              description: "Jogador não encontrado",
-              content: {
-                "application/json": {
-                  schema: { $ref: "#/components/schemas/Error" },
-                },
-              },
-            },
-          },
-        },
-      },
-      "/players/team/{teamId}": {
-        get: {
-          tags: ["Players"],
-          summary: "Buscar jogadores por time",
-          description: "Retorna todos os jogadores de um time específico",
-          parameters: [
-            {
-              name: "teamId",
-              in: "path",
-              required: true,
-              schema: { type: "string", format: "uuid" },
-              description: "ID do time",
-            },
-          ],
-          responses: {
-            200: {
-              description: "Lista de jogadores do time",
-              content: {
-                "application/json": {
-                  schema: {
-                    type: "array",
-                    items: { $ref: "#/components/schemas/Player" },
-                  },
                 },
               },
             },

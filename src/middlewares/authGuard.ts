@@ -1,5 +1,7 @@
 import { Request, Response, NextFunction } from "express";
+import jwt from "jsonwebtoken";
 import { AppError } from "../errors/AppError";
+import { env } from "../config/env";
 
 export interface AuthRequest extends Request {
   user?: {
@@ -16,16 +18,29 @@ export function authGuard(req: AuthRequest, _res: Response, next: NextFunction):
     throw new AppError("Token not provided", 401);
   }
 
-  // TODO: Implementar verificação JWT real quando a entidade User for criada
-  // Por enquanto, o token é validado mas o decode será integrado depois
   const token = authHeader.split(" ")[1];
 
   if (!token) {
     throw new AppError("Token not provided", 401);
   }
 
-  // Placeholder: será substituído por jwt.verify() na implementação de auth
-  next();
+  try {
+    const decoded = jwt.verify(token, env.jwt.secret) as {
+      id: string;
+      email: string;
+      role: "user" | "admin";
+    };
+
+    req.user = {
+      id: decoded.id,
+      email: decoded.email,
+      role: decoded.role,
+    };
+
+    next();
+  } catch {
+    throw new AppError("Invalid or expired token", 401);
+  }
 }
 
 export function adminGuard(req: AuthRequest, _res: Response, next: NextFunction): void {

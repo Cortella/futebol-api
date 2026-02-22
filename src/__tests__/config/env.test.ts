@@ -18,6 +18,8 @@ describe("env config", () => {
     delete process.env.DB_USERNAME;
     delete process.env.DB_PASSWORD;
     delete process.env.DB_DATABASE;
+    delete process.env.JWT_SECRET;
+    delete process.env.JWT_EXPIRES_IN;
 
     jest.mock("dotenv/config", () => ({}));
 
@@ -30,6 +32,8 @@ describe("env config", () => {
     expect(env.db.username).toBe("postgres");
     expect(env.db.password).toBe("postgres");
     expect(env.db.database).toBe("futebol_db");
+    expect(env.jwt.secret).toBe("futmanager-dev-secret-key");
+    expect(env.jwt.expiresIn).toBe("7d");
   });
 
   it("should use environment variables when set", () => {
@@ -40,6 +44,8 @@ describe("env config", () => {
     process.env.DB_USERNAME = "admin";
     process.env.DB_PASSWORD = "secret";
     process.env.DB_DATABASE = "prod_db";
+    process.env.JWT_SECRET = "my-prod-secret";
+    process.env.JWT_EXPIRES_IN = "1d";
 
     jest.mock("dotenv/config", () => ({}));
 
@@ -52,5 +58,7 @@ describe("env config", () => {
     expect(env.db.username).toBe("admin");
     expect(env.db.password).toBe("secret");
     expect(env.db.database).toBe("prod_db");
+    expect(env.jwt.secret).toBe("my-prod-secret");
+    expect(env.jwt.expiresIn).toBe("1d");
   });
 });

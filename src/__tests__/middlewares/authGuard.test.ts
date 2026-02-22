@@ -1,6 +1,13 @@
-import { Request, Response, NextFunction } from "express";
+import { Response, NextFunction } from "express";
+import jwt from "jsonwebtoken";
 import { authGuard, adminGuard, AuthRequest } from "../../middlewares/authGuard";
 import { AppError } from "../../errors/AppError";
+
+jest.mock("../../config/env", () => ({
+  env: {
+    jwt: { secret: "test-secret", expiresIn: "7d" },
+  },
+}));
 
 describe("authGuard", () => {
   let mockReq: Partial<AuthRequest>;
@@ -39,12 +46,37 @@ describe("authGuard", () => {
     );
   });
 
-  it("should call next if valid Bearer token is provided", () => {
-    mockReq.headers = { authorization: "Bearer valid-token-123" };
+  it("should call next and set req.user with valid JWT", () => {
+    const payload = { id: "user-1", email: "test@test.com", role: "user" as const };
+    const token = jwt.sign(payload, "test-secret");
+    mockReq.headers = { authorization: `Bearer ${token}` };
 
     authGuard(mockReq as AuthRequest, mockRes as Response, mockNext);
 
     expect(mockNext).toHaveBeenCalled();
+    expect(mockReq.user).toBeDefined();
+    expect(mockReq.user!.id).toBe("user-1");
+    expect(mockReq.user!.email).toBe("test@test.com");
+    expect(mockReq.user!.role).toBe("user");
+  });
+
+  it("should throw 401 if token is invalid", () => {
+    mockReq.headers = { authorization: "Bearer invalid-token-xyz" };
+
+    expect(() => authGuard(mockReq as AuthRequest, mockRes as Response, mockNext)).toThrow(
+      "Invalid or expired token",
+    );
+  });
+
+  it("should throw 401 if token is expired", () => {
+    const token = jwt.sign({ id: "user-1", email: "test@test.com", role: "user" }, "test-secret", {
+      expiresIn: "0s",
+    });
+    mockReq.headers = { authorization: `Bearer ${token}` };
+
+    expect(() => authGuard(mockReq as AuthRequest, mockRes as Response, mockNext)).toThrow(
+      "Invalid or expired token",
+    );
   });
 });
 
