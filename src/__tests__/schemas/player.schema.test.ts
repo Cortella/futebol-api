@@ -1,7 +1,4 @@
-import {
-  createPlayerSchema,
-  updatePlayerSchema,
-} from "../../schemas/player.schema";
+import { createPlayerSchema, updatePlayerSchema } from "../../schemas/player.schema";
 
 describe("player.schema", () => {
   describe("createPlayerSchema", () => {

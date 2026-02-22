@@ -32,12 +32,14 @@ export class PlayerService {
 
   async create(data: CreatePlayerDTO): Promise<Player> {
     const player = playerRepository.create(data);
+
     return playerRepository.save(player);
   }
 
   async update(id: string, data: UpdatePlayerDTO): Promise<Player> {
     const player = await this.findById(id);
     Object.assign(player, data);
+
     return playerRepository.save(player);
   }
 

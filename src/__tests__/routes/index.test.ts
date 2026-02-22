@@ -35,8 +35,6 @@ describe("routes/index", () => {
 
     handler(req, res);
 
-    expect(mockJson).toHaveBeenCalledWith(
-      expect.objectContaining({ status: "ok" }),
-    );
+    expect(mockJson).toHaveBeenCalledWith(expect.objectContaining({ status: "ok" }));
   });
 });

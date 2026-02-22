@@ -25,12 +25,14 @@ export class TeamService {
 
   async create(data: CreateTeamDTO): Promise<Team> {
     const team = teamRepository.create(data);
+
     return teamRepository.save(team);
   }
 
   async update(id: string, data: UpdateTeamDTO): Promise<Team> {
     const team = await this.findById(id);
     Object.assign(team, data);
+
     return teamRepository.save(team);
   }
 

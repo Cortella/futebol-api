@@ -36,19 +36,19 @@ describe("errorHandler middleware", () => {
 
   it("should handle ZodError with issues array", () => {
     let zodError: any;
+
     try {
       z.string().parse(123);
     } catch (e) {
       zodError = e;
     }
+
     const res = createRes();
 
     errorHandler(zodError, createReq(), res, next);
 
     expect(mockStatus).toHaveBeenCalledWith(422);
-    expect(mockJson).toHaveBeenCalledWith(
-      expect.objectContaining({ status: "validation_error" }),
-    );
+    expect(mockJson).toHaveBeenCalledWith(expect.objectContaining({ status: "validation_error" }));
   });
 
   it("should handle unexpected errors with 500", () => {

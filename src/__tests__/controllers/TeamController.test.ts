@@ -30,9 +30,7 @@ import { TeamController } from "../../controllers/TeamController";
 import { Request, Response } from "express";
 
 const mockJson = jest.fn();
-const mockStatus = jest
-  .fn()
-  .mockReturnValue({ json: mockJson, send: jest.fn() });
+const mockStatus = jest.fn().mockReturnValue({ json: mockJson, send: jest.fn() });
 const mockSend = jest.fn();
 
 const createRes = () =>

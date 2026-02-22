@@ -1,9 +1,6 @@
 import { Request, Response } from "express";
 import { PlayerService } from "../services/PlayerService";
-import {
-  createPlayerSchema,
-  updatePlayerSchema,
-} from "../schemas/player.schema";
+import { createPlayerSchema, updatePlayerSchema } from "../schemas/player.schema";
 
 const playerService = new PlayerService();
 
