@@ -1,4 +1,4 @@
-# Guia para escrever Copilot Instructions
+# Guia para escrever Copilot Instructions - v1
 
 > Use este arquivo como referência para preencher o `.github/copilot-instructions.md`.
 > Depois de preencher, pode deletar este arquivo.
