@@ -17,11 +17,10 @@ export function errorHandler(
   }
 
   if (err instanceof ZodError) {
-    const issues = (err as any).issues ?? (err as any).errors ?? [];
     res.status(422).json({
       status: "validation_error",
-      errors: issues.map((e: any) => ({
-        field: Array.isArray(e.path) ? e.path.join(".") : String(e.path ?? ""),
+      errors: err.issues.map((e) => ({
+        field: e.path.join("."),
         message: e.message,
       })),
     });

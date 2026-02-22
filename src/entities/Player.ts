@@ -32,7 +32,11 @@ export class Player {
   @Column({ type: "uuid", nullable: true })
   teamId: string;
 
-  @ManyToOne(() => Team, (team) => team.players, { onDelete: "SET NULL" })
+  @ManyToOne(
+    /* istanbul ignore next */ () => Team,
+    /* istanbul ignore next */ (team) => team.players,
+    { onDelete: "SET NULL" },
+  )
   @JoinColumn({ name: "teamId" })
   team: Team;
 

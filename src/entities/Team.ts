@@ -28,7 +28,10 @@ export class Team {
   @Column({ length: 500, nullable: true })
   logoUrl: string;
 
-  @OneToMany(() => Player, (player) => player.team)
+  @OneToMany(
+    /* istanbul ignore next */ () => Player,
+    /* istanbul ignore next */ (player) => player.team,
+  )
   players: Player[];
 
   @CreateDateColumn()
