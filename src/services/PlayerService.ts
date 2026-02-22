@@ -19,6 +19,16 @@ export class PlayerService {
     });
   }
 
+  async findForSaleExcludingTeam(teamId: string): Promise<Player[]> {
+    return this.repository
+      .createQueryBuilder("player")
+      .leftJoinAndSelect("player.team", "team")
+      .where("player.for_sale = :forSale", { forSale: true })
+      .andWhere("(player.team_id != :teamId OR player.team_id IS NULL)", { teamId })
+      .orderBy("player.market_value", "DESC")
+      .getMany();
+  }
+
   async findById(id: string): Promise<Player> {
     const player = await this.repository.findOne({ where: { id }, relations: ["team"] });
 
@@ -65,6 +75,10 @@ export class PlayerService {
 
     if (data.shirtNumber !== undefined) {
       updateData.shirtNumber = data.shirtNumber ?? null;
+    }
+
+    if (data.askingPrice !== undefined) {
+      updateData.askingPrice = data.askingPrice != null ? String(data.askingPrice) : null;
     }
 
     Object.assign(player, updateData);

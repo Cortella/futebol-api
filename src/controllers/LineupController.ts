@@ -6,13 +6,13 @@ export class LineupController {
   private lineupService = new LineupService();
 
   async findByCareer(req: Request, res: Response): Promise<void> {
-    const lineups = await this.lineupService.findByCareer(req.params.careerId);
+    const lineups = await this.lineupService.findByCareer(String(req.params.careerId));
 
     res.json(lineups);
   }
 
   async findById(req: Request, res: Response): Promise<void> {
-    const lineup = await this.lineupService.findById(req.params.id);
+    const lineup = await this.lineupService.findById(String(req.params.id));
 
     res.json(lineup);
   }
@@ -26,13 +26,13 @@ export class LineupController {
 
   async update(req: Request, res: Response): Promise<void> {
     const data = updateLineupSchema.parse(req.body);
-    const lineup = await this.lineupService.update(req.params.id, data);
+    const lineup = await this.lineupService.update(String(req.params.id), data);
 
     res.json(lineup);
   }
 
   async delete(req: Request, res: Response): Promise<void> {
-    await this.lineupService.delete(req.params.id);
+    await this.lineupService.delete(String(req.params.id));
 
     res.status(204).send();
   }

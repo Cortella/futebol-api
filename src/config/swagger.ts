@@ -911,6 +911,37 @@ const options: swaggerJsdoc.Options = {
           },
         },
       },
+      "/championships/{id}/divisions": {
+        get: {
+          tags: ["Championships"],
+          summary: "Listar divisões de um campeonato",
+          description: "Retorna todas as divisões de um campeonato específico.",
+          security: [{ bearerAuth: [] }],
+          parameters: [
+            {
+              name: "id",
+              in: "path",
+              required: true,
+              schema: { type: "string", format: "uuid" },
+              description: "ID do campeonato",
+            },
+          ],
+          responses: {
+            200: {
+              description: "Lista de divisões do campeonato",
+              content: {
+                "application/json": {
+                  schema: { type: "array", items: { $ref: "#/components/schemas/Division" } },
+                },
+              },
+            },
+            404: {
+              description: "Campeonato não encontrado",
+              content: { "application/json": { schema: { $ref: "#/components/schemas/Error" } } },
+            },
+          },
+        },
+      },
       "/divisions": {
         get: {
           tags: ["Divisions"],
@@ -1150,6 +1181,523 @@ const options: swaggerJsdoc.Options = {
             404: {
               description: "Não encontrada",
               content: { "application/json": { schema: { $ref: "#/components/schemas/Error" } } },
+            },
+          },
+        },
+      },
+      "/careers/{cId}/teams": {
+        get: {
+          tags: ["Career Game"],
+          summary: "Listar times da divisão da carreira",
+          description: "Retorna todos os times participantes da divisão do usuário nesta carreira.",
+          security: [{ bearerAuth: [] }],
+          parameters: [
+            {
+              name: "cId",
+              in: "path",
+              required: true,
+              schema: { type: "string", format: "uuid" },
+              description: "ID da carreira",
+            },
+          ],
+          responses: {
+            200: {
+              description: "Lista de times",
+              content: {
+                "application/json": {
+                  schema: { type: "array", items: { $ref: "#/components/schemas/Team" } },
+                },
+              },
+            },
+            403: {
+              description: "Sem permissão",
+              content: { "application/json": { schema: { $ref: "#/components/schemas/Error" } } },
+            },
+            404: {
+              description: "Carreira não encontrada",
+              content: { "application/json": { schema: { $ref: "#/components/schemas/Error" } } },
+            },
+          },
+        },
+      },
+      "/careers/{cId}/my-team": {
+        get: {
+          tags: ["Career Game"],
+          summary: "Meu time na carreira",
+          description: "Retorna o time do usuário com elenco completo de jogadores.",
+          security: [{ bearerAuth: [] }],
+          parameters: [
+            { name: "cId", in: "path", required: true, schema: { type: "string", format: "uuid" } },
+          ],
+          responses: {
+            200: {
+              description: "Time com elenco",
+              content: { "application/json": { schema: { $ref: "#/components/schemas/Team" } } },
+            },
+            403: {
+              description: "Sem permissão",
+              content: { "application/json": { schema: { $ref: "#/components/schemas/Error" } } },
+            },
+            404: {
+              description: "Carreira não encontrada",
+              content: { "application/json": { schema: { $ref: "#/components/schemas/Error" } } },
+            },
+          },
+        },
+      },
+      "/careers/{cId}/teams/{id}": {
+        get: {
+          tags: ["Career Game"],
+          summary: "Detalhe de um time + elenco",
+          security: [{ bearerAuth: [] }],
+          parameters: [
+            { name: "cId", in: "path", required: true, schema: { type: "string", format: "uuid" } },
+            {
+              name: "id",
+              in: "path",
+              required: true,
+              schema: { type: "string", format: "uuid" },
+              description: "ID do time",
+            },
+          ],
+          responses: {
+            200: {
+              description: "Time com elenco",
+              content: { "application/json": { schema: { $ref: "#/components/schemas/Team" } } },
+            },
+            404: {
+              description: "Não encontrado",
+              content: { "application/json": { schema: { $ref: "#/components/schemas/Error" } } },
+            },
+          },
+        },
+      },
+      "/careers/{cId}/players": {
+        get: {
+          tags: ["Career Game"],
+          summary: "Elenco do time do usuário",
+          description: "Retorna todos os jogadores do time do usuário na carreira.",
+          security: [{ bearerAuth: [] }],
+          parameters: [
+            { name: "cId", in: "path", required: true, schema: { type: "string", format: "uuid" } },
+          ],
+          responses: {
+            200: {
+              description: "Lista de jogadores",
+              content: {
+                "application/json": {
+                  schema: { type: "array", items: { $ref: "#/components/schemas/Player" } },
+                },
+              },
+            },
+            403: {
+              description: "Sem permissão",
+              content: { "application/json": { schema: { $ref: "#/components/schemas/Error" } } },
+            },
+            404: {
+              description: "Carreira não encontrada",
+              content: { "application/json": { schema: { $ref: "#/components/schemas/Error" } } },
+            },
+          },
+        },
+      },
+      "/careers/{cId}/players/{id}": {
+        get: {
+          tags: ["Career Game"],
+          summary: "Detalhe de um jogador",
+          security: [{ bearerAuth: [] }],
+          parameters: [
+            { name: "cId", in: "path", required: true, schema: { type: "string", format: "uuid" } },
+            {
+              name: "id",
+              in: "path",
+              required: true,
+              schema: { type: "string", format: "uuid" },
+              description: "ID do jogador",
+            },
+          ],
+          responses: {
+            200: {
+              description: "Jogador",
+              content: { "application/json": { schema: { $ref: "#/components/schemas/Player" } } },
+            },
+            404: {
+              description: "Não encontrado",
+              content: { "application/json": { schema: { $ref: "#/components/schemas/Error" } } },
+            },
+          },
+        },
+      },
+      "/careers/{cId}/tactic": {
+        get: {
+          tags: ["Career Game"],
+          summary: "Tática atual da carreira",
+          security: [{ bearerAuth: [] }],
+          parameters: [
+            { name: "cId", in: "path", required: true, schema: { type: "string", format: "uuid" } },
+          ],
+          responses: {
+            200: {
+              description: "Tática",
+              content: { "application/json": { schema: { $ref: "#/components/schemas/Tactic" } } },
+            },
+            404: {
+              description: "Tática não encontrada",
+              content: { "application/json": { schema: { $ref: "#/components/schemas/Error" } } },
+            },
+          },
+        },
+        put: {
+          tags: ["Career Game"],
+          summary: "Alterar tática da carreira",
+          security: [{ bearerAuth: [] }],
+          parameters: [
+            { name: "cId", in: "path", required: true, schema: { type: "string", format: "uuid" } },
+          ],
+          requestBody: {
+            required: true,
+            content: {
+              "application/json": {
+                schema: {
+                  type: "object",
+                  properties: {
+                    formation: { type: "string", example: "4-3-3" },
+                    style: {
+                      type: "string",
+                      enum: [
+                        "ultra_defensive",
+                        "defensive",
+                        "moderate",
+                        "offensive",
+                        "ultra_offensive",
+                      ],
+                    },
+                    marking: { type: "string", enum: ["zone", "man_to_man"] },
+                    tempo: { type: "string", enum: ["slow", "normal", "fast"] },
+                    passing: { type: "string", enum: ["short", "mixed", "long"] },
+                    pressure: { type: "string", enum: ["low", "normal", "high"] },
+                  },
+                },
+              },
+            },
+          },
+          responses: {
+            200: {
+              description: "Tática atualizada",
+              content: { "application/json": { schema: { $ref: "#/components/schemas/Tactic" } } },
+            },
+            422: {
+              description: "Erro de validação",
+              content: {
+                "application/json": { schema: { $ref: "#/components/schemas/ValidationError" } },
+              },
+            },
+          },
+        },
+      },
+      "/careers/{cId}/lineup": {
+        get: {
+          tags: ["Career Game"],
+          summary: "Escalação atual da carreira",
+          security: [{ bearerAuth: [] }],
+          parameters: [
+            { name: "cId", in: "path", required: true, schema: { type: "string", format: "uuid" } },
+          ],
+          responses: {
+            200: {
+              description: "Escalação com jogadores",
+              content: { "application/json": { schema: { $ref: "#/components/schemas/Lineup" } } },
+            },
+            404: {
+              description: "Escalação não encontrada",
+              content: { "application/json": { schema: { $ref: "#/components/schemas/Error" } } },
+            },
+          },
+        },
+        put: {
+          tags: ["Career Game"],
+          summary: "Definir escalação (titulares e reservas)",
+          security: [{ bearerAuth: [] }],
+          parameters: [
+            { name: "cId", in: "path", required: true, schema: { type: "string", format: "uuid" } },
+          ],
+          requestBody: {
+            required: true,
+            content: {
+              "application/json": {
+                schema: {
+                  type: "object",
+                  required: ["starters"],
+                  properties: {
+                    name: { type: "string", nullable: true, example: "Titular" },
+                    starters: {
+                      type: "array",
+                      minItems: 11,
+                      maxItems: 11,
+                      items: {
+                        type: "object",
+                        required: ["playerId", "positionSlot"],
+                        properties: {
+                          playerId: { type: "string", format: "uuid" },
+                          positionSlot: { type: "string", example: "ZAG1" },
+                        },
+                      },
+                    },
+                    reserves: {
+                      type: "array",
+                      maxItems: 12,
+                      items: {
+                        type: "object",
+                        required: ["playerId", "positionSlot"],
+                        properties: {
+                          playerId: { type: "string", format: "uuid" },
+                          positionSlot: { type: "string", example: "ATA3" },
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+          responses: {
+            200: {
+              description: "Escalação atualizada",
+              content: { "application/json": { schema: { $ref: "#/components/schemas/Lineup" } } },
+            },
+            422: {
+              description: "Erro de validação",
+              content: {
+                "application/json": { schema: { $ref: "#/components/schemas/ValidationError" } },
+              },
+            },
+          },
+        },
+      },
+      "/careers/{cId}/standings": {
+        get: {
+          tags: ["Career Game"],
+          summary: "Tabela de classificação",
+          description: "Retorna a tabela de classificação da divisão da carreira do usuário.",
+          security: [{ bearerAuth: [] }],
+          parameters: [
+            { name: "cId", in: "path", required: true, schema: { type: "string", format: "uuid" } },
+          ],
+          responses: {
+            200: {
+              description: "Classificação",
+              content: {
+                "application/json": {
+                  schema: { type: "array", items: { $ref: "#/components/schemas/Standing" } },
+                },
+              },
+            },
+          },
+        },
+      },
+      "/careers/{cId}/rounds": {
+        get: {
+          tags: ["Career Game"],
+          summary: "Listar rodadas",
+          description: "Retorna todas as rodadas da divisão da carreira.",
+          security: [{ bearerAuth: [] }],
+          parameters: [
+            { name: "cId", in: "path", required: true, schema: { type: "string", format: "uuid" } },
+          ],
+          responses: {
+            200: {
+              description: "Lista de rodadas",
+              content: {
+                "application/json": {
+                  schema: { type: "array", items: { $ref: "#/components/schemas/Round" } },
+                },
+              },
+            },
+          },
+        },
+      },
+      "/careers/{cId}/rounds/{number}": {
+        get: {
+          tags: ["Career Game"],
+          summary: "Jogos de uma rodada específica",
+          description: "Retorna a rodada e seus jogos pelo número da rodada.",
+          security: [{ bearerAuth: [] }],
+          parameters: [
+            { name: "cId", in: "path", required: true, schema: { type: "string", format: "uuid" } },
+            {
+              name: "number",
+              in: "path",
+              required: true,
+              schema: { type: "integer" },
+              description: "Número da rodada",
+            },
+          ],
+          responses: {
+            200: { description: "Rodada com partidas" },
+            404: {
+              description: "Rodada não encontrada",
+              content: { "application/json": { schema: { $ref: "#/components/schemas/Error" } } },
+            },
+          },
+        },
+      },
+      "/careers/{cId}/matches/{id}": {
+        get: {
+          tags: ["Career Game"],
+          summary: "Detalhe de uma partida",
+          description: "Retorna detalhes de uma partida com eventos (gols, cartões, etc).",
+          security: [{ bearerAuth: [] }],
+          parameters: [
+            { name: "cId", in: "path", required: true, schema: { type: "string", format: "uuid" } },
+            {
+              name: "id",
+              in: "path",
+              required: true,
+              schema: { type: "string", format: "uuid" },
+              description: "ID da partida",
+            },
+          ],
+          responses: {
+            200: {
+              description: "Partida",
+              content: { "application/json": { schema: { $ref: "#/components/schemas/Match" } } },
+            },
+            404: {
+              description: "Não encontrada",
+              content: { "application/json": { schema: { $ref: "#/components/schemas/Error" } } },
+            },
+          },
+        },
+      },
+      "/careers/{cId}/next-match": {
+        get: {
+          tags: ["Career Game"],
+          summary: "Prévia da próxima partida",
+          description: "Retorna a próxima partida do time do usuário na rodada atual.",
+          security: [{ bearerAuth: [] }],
+          parameters: [
+            { name: "cId", in: "path", required: true, schema: { type: "string", format: "uuid" } },
+          ],
+          responses: {
+            200: {
+              description: "Próxima partida",
+              content: { "application/json": { schema: { $ref: "#/components/schemas/Match" } } },
+            },
+            404: {
+              description: "Nenhuma partida encontrada",
+              content: { "application/json": { schema: { $ref: "#/components/schemas/Error" } } },
+            },
+          },
+        },
+      },
+      "/careers/{cId}/market": {
+        get: {
+          tags: ["Career Game"],
+          summary: "Jogadores à venda",
+          description: "Lista jogadores disponíveis no mercado (excluindo os do time do usuário).",
+          security: [{ bearerAuth: [] }],
+          parameters: [
+            { name: "cId", in: "path", required: true, schema: { type: "string", format: "uuid" } },
+          ],
+          responses: {
+            200: {
+              description: "Lista de jogadores à venda",
+              content: {
+                "application/json": {
+                  schema: { type: "array", items: { $ref: "#/components/schemas/Player" } },
+                },
+              },
+            },
+          },
+        },
+      },
+      "/careers/{cId}/market/sell": {
+        post: {
+          tags: ["Career Game"],
+          summary: "Colocar jogador à venda",
+          description: "O usuário coloca um jogador do seu time à venda com preço pedido.",
+          security: [{ bearerAuth: [] }],
+          parameters: [
+            { name: "cId", in: "path", required: true, schema: { type: "string", format: "uuid" } },
+          ],
+          requestBody: {
+            required: true,
+            content: {
+              "application/json": {
+                schema: {
+                  type: "object",
+                  required: ["playerId", "askingPrice"],
+                  properties: {
+                    playerId: { type: "string", format: "uuid" },
+                    askingPrice: { type: "integer", minimum: 1, description: "Preço em centavos" },
+                  },
+                },
+              },
+            },
+          },
+          responses: {
+            200: {
+              description: "Jogador colocado à venda",
+              content: { "application/json": { schema: { $ref: "#/components/schemas/Player" } } },
+            },
+            403: {
+              description: "Jogador não pertence ao seu time",
+              content: { "application/json": { schema: { $ref: "#/components/schemas/Error" } } },
+            },
+            422: {
+              description: "Erro de validação",
+              content: {
+                "application/json": { schema: { $ref: "#/components/schemas/ValidationError" } },
+              },
+            },
+          },
+        },
+      },
+      "/careers/{cId}/market/sell/{playerId}": {
+        delete: {
+          tags: ["Career Game"],
+          summary: "Retirar jogador do mercado",
+          description: "Remove o jogador da lista de venda.",
+          security: [{ bearerAuth: [] }],
+          parameters: [
+            { name: "cId", in: "path", required: true, schema: { type: "string", format: "uuid" } },
+            {
+              name: "playerId",
+              in: "path",
+              required: true,
+              schema: { type: "string", format: "uuid" },
+            },
+          ],
+          responses: {
+            204: { description: "Jogador retirado do mercado" },
+            403: {
+              description: "Sem permissão",
+              content: { "application/json": { schema: { $ref: "#/components/schemas/Error" } } },
+            },
+            404: {
+              description: "Jogador não encontrado",
+              content: { "application/json": { schema: { $ref: "#/components/schemas/Error" } } },
+            },
+          },
+        },
+      },
+      "/careers/{cId}/transfers": {
+        get: {
+          tags: ["Career Game"],
+          summary: "Histórico de transferências",
+          description: "Retorna as transferências da temporada atual do time do usuário.",
+          security: [{ bearerAuth: [] }],
+          parameters: [
+            { name: "cId", in: "path", required: true, schema: { type: "string", format: "uuid" } },
+          ],
+          responses: {
+            200: {
+              description: "Lista de transferências",
+              content: {
+                "application/json": {
+                  schema: { type: "array", items: { $ref: "#/components/schemas/Transfer" } },
+                },
+              },
             },
           },
         },

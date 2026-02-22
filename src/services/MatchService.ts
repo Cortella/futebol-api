@@ -1,5 +1,6 @@
 import { AppDataSource } from "../config/data-source";
 import { Match } from "../entities/Match";
+import { Round } from "../entities/Round";
 import { AppError } from "../errors/AppError";
 import { CreateMatchInput } from "../schemas/match.schema";
 
@@ -32,6 +33,27 @@ export class MatchService {
     }
 
     return match;
+  }
+
+  async findNextForTeam(
+    divisionId: string,
+    roundNumber: number,
+    teamId: string,
+  ): Promise<Match | null> {
+    const roundRepo = AppDataSource.getRepository(Round);
+    const round = await roundRepo.findOne({ where: { divisionId, number: roundNumber } });
+
+    if (!round) {
+      return null;
+    }
+
+    return this.repository.findOne({
+      where: [
+        { roundId: round.id, homeTeamId: teamId },
+        { roundId: round.id, awayTeamId: teamId },
+      ],
+      relations: ["homeTeam", "awayTeam", "round"],
+    });
   }
 
   async create(data: CreateMatchInput): Promise<Match> {

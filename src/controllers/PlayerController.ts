@@ -12,13 +12,13 @@ export class PlayerController {
   }
 
   async findByTeam(req: Request, res: Response): Promise<void> {
-    const players = await this.playerService.findByTeam(req.params.teamId);
+    const players = await this.playerService.findByTeam(String(req.params.teamId));
 
     res.json(players);
   }
 
   async findById(req: Request, res: Response): Promise<void> {
-    const player = await this.playerService.findById(req.params.id);
+    const player = await this.playerService.findById(String(req.params.id));
 
     res.json(player);
   }
@@ -32,13 +32,13 @@ export class PlayerController {
 
   async update(req: Request, res: Response): Promise<void> {
     const data = updatePlayerSchema.parse(req.body);
-    const player = await this.playerService.update(req.params.id, data);
+    const player = await this.playerService.update(String(req.params.id), data);
 
     res.json(player);
   }
 
   async delete(req: Request, res: Response): Promise<void> {
-    await this.playerService.delete(req.params.id);
+    await this.playerService.delete(String(req.params.id));
 
     res.status(204).send();
   }

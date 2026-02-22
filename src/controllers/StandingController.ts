@@ -6,13 +6,13 @@ export class StandingController {
   private standingService = new StandingService();
 
   async findByDivision(req: Request, res: Response): Promise<void> {
-    const standings = await this.standingService.findByDivision(req.params.divisionId);
+    const standings = await this.standingService.findByDivision(String(req.params.divisionId));
 
     res.json(standings);
   }
 
   async findById(req: Request, res: Response): Promise<void> {
-    const standing = await this.standingService.findById(req.params.id);
+    const standing = await this.standingService.findById(String(req.params.id));
 
     res.json(standing);
   }
@@ -25,7 +25,7 @@ export class StandingController {
   }
 
   async delete(req: Request, res: Response): Promise<void> {
-    await this.standingService.delete(req.params.id);
+    await this.standingService.delete(String(req.params.id));
 
     res.status(204).send();
   }

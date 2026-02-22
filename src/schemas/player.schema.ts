@@ -34,7 +34,18 @@ export const createPlayerSchema = z.object({
   marketValue: z.number().int().min(0, "Market value must be non-negative"),
 });
 
-export const updatePlayerSchema = createPlayerSchema.partial();
+export const updatePlayerSchema = createPlayerSchema
+  .extend({
+    forSale: z.boolean().optional(),
+    askingPrice: z.number().int().min(0).nullish(),
+    morale: z.number().int().min(0).max(100).optional(),
+    condition: z.number().int().min(0).max(100).optional(),
+    injury: z.number().int().min(0).optional(),
+    suspended: z.boolean().optional(),
+    yellowCards: z.number().int().min(0).optional(),
+    redCards: z.number().int().min(0).optional(),
+  })
+  .partial();
 
 export type CreatePlayerInput = z.infer<typeof createPlayerSchema>;
 export type UpdatePlayerInput = z.infer<typeof updatePlayerSchema>;

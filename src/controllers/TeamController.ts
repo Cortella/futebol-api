@@ -12,7 +12,7 @@ export class TeamController {
   }
 
   async findById(req: Request, res: Response): Promise<void> {
-    const team = await this.teamService.findById(req.params.id);
+    const team = await this.teamService.findById(String(req.params.id));
 
     res.json(team);
   }
@@ -26,13 +26,13 @@ export class TeamController {
 
   async update(req: Request, res: Response): Promise<void> {
     const data = updateTeamSchema.parse(req.body);
-    const team = await this.teamService.update(req.params.id, data);
+    const team = await this.teamService.update(String(req.params.id), data);
 
     res.json(team);
   }
 
   async delete(req: Request, res: Response): Promise<void> {
-    await this.teamService.delete(req.params.id);
+    await this.teamService.delete(String(req.params.id));
 
     res.status(204).send();
   }

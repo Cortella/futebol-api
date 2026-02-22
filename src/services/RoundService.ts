@@ -29,6 +29,18 @@ export class RoundService {
     return round;
   }
 
+  async findByDivisionAndNumber(divisionId: string, number: number): Promise<Round> {
+    const round = await this.repository.findOne({
+      where: { divisionId, number },
+    });
+
+    if (!round) {
+      throw new AppError("Round not found", 404);
+    }
+
+    return round;
+  }
+
   async create(data: CreateRoundInput): Promise<Round> {
     const round = this.repository.create(data);
 

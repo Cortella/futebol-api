@@ -12,7 +12,7 @@ export class SeasonController {
   }
 
   async findById(req: Request, res: Response): Promise<void> {
-    const season = await this.seasonService.findById(req.params.id);
+    const season = await this.seasonService.findById(String(req.params.id));
 
     res.json(season);
   }
@@ -26,13 +26,13 @@ export class SeasonController {
 
   async update(req: Request, res: Response): Promise<void> {
     const data = updateSeasonSchema.parse(req.body);
-    const season = await this.seasonService.update(req.params.id, data);
+    const season = await this.seasonService.update(String(req.params.id), data);
 
     res.json(season);
   }
 
   async delete(req: Request, res: Response): Promise<void> {
-    await this.seasonService.delete(req.params.id);
+    await this.seasonService.delete(String(req.params.id));
 
     res.status(204).send();
   }

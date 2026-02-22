@@ -6,13 +6,13 @@ export class LineupPlayerController {
   private lineupPlayerService = new LineupPlayerService();
 
   async findByLineup(req: Request, res: Response): Promise<void> {
-    const lineupPlayers = await this.lineupPlayerService.findByLineup(req.params.lineupId);
+    const lineupPlayers = await this.lineupPlayerService.findByLineup(String(req.params.lineupId));
 
     res.json(lineupPlayers);
   }
 
   async findById(req: Request, res: Response): Promise<void> {
-    const lineupPlayer = await this.lineupPlayerService.findById(req.params.id);
+    const lineupPlayer = await this.lineupPlayerService.findById(String(req.params.id));
 
     res.json(lineupPlayer);
   }
@@ -26,13 +26,13 @@ export class LineupPlayerController {
 
   async update(req: Request, res: Response): Promise<void> {
     const data = updateLineupPlayerSchema.parse(req.body);
-    const lineupPlayer = await this.lineupPlayerService.update(req.params.id, data);
+    const lineupPlayer = await this.lineupPlayerService.update(String(req.params.id), data);
 
     res.json(lineupPlayer);
   }
 
   async delete(req: Request, res: Response): Promise<void> {
-    await this.lineupPlayerService.delete(req.params.id);
+    await this.lineupPlayerService.delete(String(req.params.id));
 
     res.status(204).send();
   }

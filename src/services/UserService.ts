@@ -78,7 +78,7 @@ export class UserService {
 
   private generateToken(user: User): string {
     return jwt.sign({ id: user.id, email: user.email, role: "user" }, env.jwt.secret, {
-      expiresIn: env.jwt.expiresIn as string & {},
+      expiresIn: env.jwt.expiresIn as unknown as number,
     });
   }
 }

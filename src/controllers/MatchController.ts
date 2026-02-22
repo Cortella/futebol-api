@@ -12,13 +12,13 @@ export class MatchController {
   }
 
   async findByRound(req: Request, res: Response): Promise<void> {
-    const matches = await this.matchService.findByRound(req.params.roundId);
+    const matches = await this.matchService.findByRound(String(req.params.roundId));
 
     res.json(matches);
   }
 
   async findById(req: Request, res: Response): Promise<void> {
-    const match = await this.matchService.findById(req.params.id);
+    const match = await this.matchService.findById(String(req.params.id));
 
     res.json(match);
   }
@@ -31,7 +31,7 @@ export class MatchController {
   }
 
   async delete(req: Request, res: Response): Promise<void> {
-    await this.matchService.delete(req.params.id);
+    await this.matchService.delete(String(req.params.id));
 
     res.status(204).send();
   }

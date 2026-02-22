@@ -12,13 +12,13 @@ export class RoundController {
   }
 
   async findByDivision(req: Request, res: Response): Promise<void> {
-    const rounds = await this.roundService.findByDivision(req.params.divisionId);
+    const rounds = await this.roundService.findByDivision(String(req.params.divisionId));
 
     res.json(rounds);
   }
 
   async findById(req: Request, res: Response): Promise<void> {
-    const round = await this.roundService.findById(req.params.id);
+    const round = await this.roundService.findById(String(req.params.id));
 
     res.json(round);
   }
@@ -31,7 +31,7 @@ export class RoundController {
   }
 
   async delete(req: Request, res: Response): Promise<void> {
-    await this.roundService.delete(req.params.id);
+    await this.roundService.delete(String(req.params.id));
 
     res.status(204).send();
   }

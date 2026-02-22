@@ -26,7 +26,7 @@ export class CareerController {
       throw new AppError("Token not provided", 401);
     }
 
-    const career = await this.careerService.findById(req.params.id, userId);
+    const career = await this.careerService.findById(String(req.params.id), userId);
 
     res.json(career);
   }
@@ -51,7 +51,7 @@ export class CareerController {
       throw new AppError("Token not provided", 401);
     }
 
-    await this.careerService.delete(req.params.id, userId);
+    await this.careerService.delete(String(req.params.id), userId);
 
     res.status(204).send();
   }

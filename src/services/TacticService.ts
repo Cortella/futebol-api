@@ -42,6 +42,18 @@ export class TacticService {
     return this.repository.save(tactic);
   }
 
+  async updateByCareer(careerId: string, data: UpdateTacticInput): Promise<Tactic> {
+    let tactic = await this.repository.findOne({ where: { careerId } });
+
+    if (!tactic) {
+      tactic = this.repository.create({ careerId, ...data });
+    } else {
+      Object.assign(tactic, data);
+    }
+
+    return this.repository.save(tactic);
+  }
+
   async delete(id: string): Promise<void> {
     const tactic = await this.findById(id);
 

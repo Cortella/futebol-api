@@ -12,13 +12,15 @@ export class DivisionTeamController {
   }
 
   async findByDivision(req: Request, res: Response): Promise<void> {
-    const divisionTeams = await this.divisionTeamService.findByDivision(req.params.divisionId);
+    const divisionTeams = await this.divisionTeamService.findByDivision(
+      String(req.params.divisionId),
+    );
 
     res.json(divisionTeams);
   }
 
   async findById(req: Request, res: Response): Promise<void> {
-    const divisionTeam = await this.divisionTeamService.findById(req.params.id);
+    const divisionTeam = await this.divisionTeamService.findById(String(req.params.id));
 
     res.json(divisionTeam);
   }
@@ -32,13 +34,13 @@ export class DivisionTeamController {
 
   async update(req: Request, res: Response): Promise<void> {
     const data = updateDivisionTeamSchema.parse(req.body);
-    const divisionTeam = await this.divisionTeamService.update(req.params.id, data);
+    const divisionTeam = await this.divisionTeamService.update(String(req.params.id), data);
 
     res.json(divisionTeam);
   }
 
   async delete(req: Request, res: Response): Promise<void> {
-    await this.divisionTeamService.delete(req.params.id);
+    await this.divisionTeamService.delete(String(req.params.id));
 
     res.status(204).send();
   }

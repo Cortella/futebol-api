@@ -1,9 +1,11 @@
 import { Request, Response } from "express";
 import { ChampionshipService } from "../services/ChampionshipService";
+import { DivisionService } from "../services/DivisionService";
 import { createChampionshipSchema, updateChampionshipSchema } from "../schemas/championship.schema";
 
 export class ChampionshipController {
   private championshipService = new ChampionshipService();
+  private divisionService = new DivisionService();
 
   async findAll(_req: Request, res: Response): Promise<void> {
     const championships = await this.championshipService.findAll();
@@ -12,7 +14,7 @@ export class ChampionshipController {
   }
 
   async findById(req: Request, res: Response): Promise<void> {
-    const championship = await this.championshipService.findById(req.params.id);
+    const championship = await this.championshipService.findById(String(req.params.id));
 
     res.json(championship);
   }
@@ -26,14 +28,21 @@ export class ChampionshipController {
 
   async update(req: Request, res: Response): Promise<void> {
     const data = updateChampionshipSchema.parse(req.body);
-    const championship = await this.championshipService.update(req.params.id, data);
+    const championship = await this.championshipService.update(String(req.params.id), data);
 
     res.json(championship);
   }
 
   async delete(req: Request, res: Response): Promise<void> {
-    await this.championshipService.delete(req.params.id);
+    await this.championshipService.delete(String(req.params.id));
 
     res.status(204).send();
+  }
+
+  async findDivisions(req: Request, res: Response): Promise<void> {
+    await this.championshipService.findById(String(req.params.id));
+    const divisions = await this.divisionService.findByChampionship(String(req.params.id));
+
+    res.json(divisions);
   }
 }

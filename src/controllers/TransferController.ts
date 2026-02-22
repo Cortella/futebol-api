@@ -12,13 +12,13 @@ export class TransferController {
   }
 
   async findBySeason(req: Request, res: Response): Promise<void> {
-    const transfers = await this.transferService.findBySeason(req.params.seasonId);
+    const transfers = await this.transferService.findBySeason(String(req.params.seasonId));
 
     res.json(transfers);
   }
 
   async findById(req: Request, res: Response): Promise<void> {
-    const transfer = await this.transferService.findById(req.params.id);
+    const transfer = await this.transferService.findById(String(req.params.id));
 
     res.json(transfer);
   }
@@ -31,7 +31,7 @@ export class TransferController {
   }
 
   async delete(req: Request, res: Response): Promise<void> {
-    await this.transferService.delete(req.params.id);
+    await this.transferService.delete(String(req.params.id));
 
     res.status(204).send();
   }

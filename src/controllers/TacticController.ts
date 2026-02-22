@@ -6,13 +6,13 @@ export class TacticController {
   private tacticService = new TacticService();
 
   async findByCareer(req: Request, res: Response): Promise<void> {
-    const tactic = await this.tacticService.findByCareer(req.params.careerId);
+    const tactic = await this.tacticService.findByCareer(String(req.params.careerId));
 
     res.json(tactic);
   }
 
   async findById(req: Request, res: Response): Promise<void> {
-    const tactic = await this.tacticService.findById(req.params.id);
+    const tactic = await this.tacticService.findById(String(req.params.id));
 
     res.json(tactic);
   }
@@ -26,13 +26,13 @@ export class TacticController {
 
   async update(req: Request, res: Response): Promise<void> {
     const data = updateTacticSchema.parse(req.body);
-    const tactic = await this.tacticService.update(req.params.id, data);
+    const tactic = await this.tacticService.update(String(req.params.id), data);
 
     res.json(tactic);
   }
 
   async delete(req: Request, res: Response): Promise<void> {
-    await this.tacticService.delete(req.params.id);
+    await this.tacticService.delete(String(req.params.id));
 
     res.status(204).send();
   }
