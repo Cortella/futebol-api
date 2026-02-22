@@ -82,7 +82,7 @@ describe("UserService", () => {
     });
 
     it("should throw 409 if email already in use", async () => {
-      mockFindOne.mockResolvedValueOnce({ id: "existing", email: "cortella@email.com" });
+      mockFindOne.mockResolvedValue({ id: "existing", email: "cortella@email.com" });
 
       await expect(service.register(validInput)).rejects.toThrow(AppError);
       await expect(service.register(validInput)).rejects.toThrow("Email already in use");
