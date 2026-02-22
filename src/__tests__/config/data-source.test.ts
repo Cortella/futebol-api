@@ -32,7 +32,7 @@ describe("data-source config", () => {
     expect(callArgs.password).toBe("postgres");
     expect(callArgs.database).toBe("futebol_db");
     expect(callArgs.synchronize).toBe(false);
-    expect(callArgs.logging).toBe(true);
+    expect(callArgs.logging).toBe(false);
     expect(AppDataSource).toBeDefined();
   });
 });
